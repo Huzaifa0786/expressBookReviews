@@ -10,9 +10,15 @@ app.use(express.json());
 
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
-app.use("/customer/auth/*", function auth(req,res,next){
-//Write the authenication mechanism here
-});
+app.use("/customer/auth/*", function auth(req, res, next) {
+    // Check if the user is authenticated
+    if (!req.session.isAuthenticated) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+  
+    // User is authenticated, continue to the next middleware or route
+    next();
+  });
  
 const PORT =5000;
 
